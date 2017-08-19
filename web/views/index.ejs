@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NRG Demo</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    NRG CLIENT
+    <script>
+      var socket = io('//localhost:3000');
+      socket.on('msg', function (data) {
+        console.log(data);
+      });
+    </script>
+  </body>
+</html>
