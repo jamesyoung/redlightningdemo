@@ -4,15 +4,23 @@ var Web3 = require('web3');
 var exec = require('child_process');
 var fromBlock = 0;
 
-function turnOn (secs) {
-  console.log('turnOn');
-  var interval = setTimeout(turnOff, secs*1000);
-  //exec('./lua Wemo.lua switch1 1');
+function turnOn (time, secs) {
+  if (time + 1000 > Math.floor(new Date().getTime() / 1000)) {
+    console.log('turnOn', __dirname);
+    exec('./lua Wemo.lua switch1 1');
+    var interval = setTimeout(turnOff, secs*1000, function(error, stdout, stderr) {
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+      if (error !== null) {
+          console.log('exec error: ' + error);
+      }
+    });
+  }
 } 
 
 function turnOff() {
-  console.log('turnOff');
-  //exec('./lua Wemo.lua switch1 0');
+  console.log('turnOff', __dirname);
+  exec('./lua Wemo.lua switch1 0');
 }
 
 router.get('/', function(req, res, next) {
