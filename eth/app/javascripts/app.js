@@ -39,6 +39,21 @@ window.App = {
       accounts = accs;
       account = accounts[0];
 
+
+      var self = this;
+      var meta;
+
+      MetaCoin.deployed().then(function(instance) {
+        meta = instance;
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST", "http://localhost:3000/init");
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(JSON.stringify({abi:instance.abi, contractAddress:instance.contract.address}));
+      }).catch(function(e) {
+        console.log(e);
+        self.setStatus("Error getting balance; see log.");
+      });
+
       self.refreshBalance();
     });
   },
@@ -58,7 +73,6 @@ window.App = {
       xmlhttp.open("POST", "http://localhost:3000/");
       xmlhttp.setRequestHeader("Content-Type", "application/json");
       xmlhttp.send(JSON.stringify({abi:instance.abi, contractAddress:instance.contract.address}));
-      return meta.getBalance.call(account, {from: account});
       return meta.getBalance.call(account, {from: account});
     }).then(function(value) {
       var balance_element = document.getElementById("balance");
