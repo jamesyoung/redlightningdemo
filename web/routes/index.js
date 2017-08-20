@@ -1,8 +1,19 @@
 var express = require('express');
 var router = express.Router();
 var Web3 = require('web3');
-
+var exec = require('child_process');
 var fromBlock = 0;
+
+function turnOn (secs) {
+  console.log('turnOn');
+  var interval = setTimeout(turnOff, secs*1000);
+  //exec('./lua Wemo.lua switch1 1');
+} 
+
+function turnOff() {
+  console.log('turnOff');
+  //exec('./lua Wemo.lua switch1 0');
+}
 
 router.get('/', function(req, res, next) {
   res.render('index');
@@ -30,7 +41,8 @@ router.post('/', function(req, res, next) {
       console.log(now, result.args._value);
       evt.stopWatching();
       fromBlock = evt.blockNumber;
-      res.io.emit("msg", {timestamp:now, value:result.args._value});
+      //res.io.emit("msg", {timestamp:now, value:result.args._value});
+      turnOn(result.args._value);
   });
   
   console.log('about to end')
